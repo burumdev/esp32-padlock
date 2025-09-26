@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+  <head>
+    <title>ESP32 On Your Desk</title>
+    <style>
+      * {
+        margin: 0;
+        font-family: sans-serif;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #222;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+      }
+      p {
+        line-height: 1.4rem;
+      }
+      form {
+        padding-top: 20px;
+      }
+      .no-error {
+        color: red;
+      }
+      .page-container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+      }
+      .page-inner {
+        background-color: #fff;
+        box-shadow: 0 0 10px 5px rgba(0, 255, 0, 0.75);
+        width: 50%;
+        border: 1px solid green;
+        padding: 25px;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        svg {
+          width: 100px;
+          margin-bottom: 25px;
+        }
+      }
+      .inputs {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        input {
+          flex-grow: 1;
+          margin-right: 10px;
+          padding-left: 8px;
+        }
+        input, button {
+          font-size: 16px;
+          height: 32px;
+          font-weight: bold;
+          border-radius: 8px;
+        }
+        button {
+          background: orange;
+          cursor: pointer;
+        }
+      }
+      .no-error {
+        display: none;
+      }
+      .error {
+        display: block;
+        color: red;
+        margin-bottom: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-container">
+      <div class="page-inner">
+        <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 47.5 47.5" style="enable-background:new 0 0 47.5 47.5;" id="svg2" xml:space="preserve"><defs id="defs6"><clipPath id="clipPath18"><path d="M 0,38 38,38 38,0 0,0 0,38 z" id="path20"/></clipPath></defs><g transform="matrix(1.25,0,0,-1.25,0,47.5)" id="g12"><g id="g14"><g clip-path="url(#clipPath18)" id="g16"><g transform="translate(19,36.9995)" id="g22"><path d="m 0,0 c -4.612,0 -8.483,-3.126 -9.639,-7.371 l 3.855,-1.052 C -5.09,-5.875 -2.767,-4 0,-4 c 3.313,0 6,-2.687 6,-6 l 0,-10 4,0 0,10 C 10,-4.477 5.523,0 0,0" id="path24" style="fill:#bcbec0;fill-opacity:1;fill-rule:nonzero;stroke:none"/></g><g transform="translate(31,5)" id="g26"><path d="m 0,0 c 0,-2.209 -1.791,-4 -4,-4 l -16,0 c -2.209,0 -4,1.791 -4,4 l 0,10 c 0,2.209 1.791,4 4,4 l 16,0 c 2.209,0 4,-1.791 4,-4 L 0,0 z" id="path28" style="fill:#ffac33;fill-opacity:1;fill-rule:nonzero;stroke:none"/></g></g></g></g></svg>
+        <h1>ESP32 <br/> On Your Desk</h1>
+        <p>Welcome to the ESP32 sitting on your desk. The device is unlocked. <br><br> You can lock it again for fun by entering the password. <br><br> Good luck! <br><br> ESP32OnYourDesk team.</p>
+        <form action="/lock">
+          <p class="no-error">The pass you provided was wrong in many ways.</p>
+          <div class="inputs">
+            <input name="password" type="password" placeholder="Wassada passvoid?" />
+            <button>Lock Device</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

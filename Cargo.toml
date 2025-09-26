@@ -1,0 +1,62 @@
+[package]
+edition      = "2021"
+name         = "esp32-padlock"
+rust-version = "1.86"
+version      = "0.1.0"
+license = "MIT"
+authors = ["Barış Ürüm"]
+repository = "https://github.com/burumdev/esp32-padlock"
+description = "ESP32cX application for securely locking-unlocking RISC-V devices over encrypted endpoint."
+keywords = ["esp32", "security", "auth", "no_std", "embedded"]
+categories = ["embedded", "no-std::no-alloc", "security", "authentication", "web-programming::http-server"]
+
+[[bin]]
+name = "esp32-padlock"
+
+[dependencies]
+esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32c3"] }
+esp-hal                = { version = "=1.0.0-rc.0", features = ["esp32c3", "unstable"] }
+esp-hal-embassy = { version = "0.9.0", features = ["esp32c3"] }
+esp-wifi = { version = "0.15.0", features = [
+  "builtin-scheduler",
+  "esp-alloc",
+  "esp32c3",
+  "wifi",
+]}
+esp-alloc = "0.8.0"
+esp-println = { version = "0.15.0", features = ["esp32c3"] }
+esp-backtrace = { version = "0.17.0", features = ["panic-handler", "println"] }
+
+embassy-net = { version = "0.7.0", features = [
+  "proto-ipv4",
+  "medium-ethernet",
+  "tcp",
+]}
+embassy-executor = { version = "0.7.0", features = ["task-arena-size-196608"] }
+embassy-time = "0.5.0"
+
+embedded-io = "0.6.1"
+embedded-io-async = "0.6.1"
+critical-section = "1.2.0"
+
+static_cell = { version = "2.1.1", features = ["nightly"] }
+embassy-sync = "0.7.2"
+
+esp-mbedtls = { path = "./esp-mbedtls", features = ["esp32c3"] }
+smoltcp = { version = "0.12.0", default-features = false, features = [
+    "proto-ipv4",
+]}
+
+[profile.dev]
+debug = true
+lto = "fat"
+opt-level = "z"
+
+[profile.release]
+codegen-units    = 1     # LLVM can perform better optimizations using a single thread
+debug            = 2
+debug-assertions = false
+incremental      = false
+lto              = 'fat'
+opt-level        = 's'
+overflow-checks  = false
