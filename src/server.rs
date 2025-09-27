@@ -53,8 +53,6 @@ pub async fn serve(
             continue;
         }
 
-        let mut buffer = [0u8; 1024];
-        let mut pos = 0;
         let mut session = Session::new(
             &mut socket,
             Mode::Server,
@@ -72,12 +70,15 @@ pub async fn serve(
         .unwrap();
 
         println!("{MOD}: Polling TLS sessions");
+        let mut buffer = [0u8; 1024];
+        let mut pos = 0;
         let lock_pass_token = "/lock?password=";
         let unlock_pass_token = "/unlock?password=";
         match session.connect().await {
             Ok(()) => {
                 println!("{MOD}: Got TLS session");
 
+                let mut req_processed = false;
                 loop {
                     match session.read(&mut buffer).await {
                         Ok(0) => {
@@ -87,15 +88,26 @@ pub async fn serve(
                             let req =
                                 unsafe { core::str::from_utf8_unchecked(&buffer[..(pos + len)]) };
 
-                            if req.contains(lock_pass_token) {
-                                has_error = toggle_lock(req, device_lock, lock_pass_token, true);
-                            }
+                            if !req_processed {
+                                if let Some(get_request) =
+                                    req.lines().find(|line| line.starts_with("GET"))
+                                {
+                                    if get_request.contains(lock_pass_token) {
+                                        has_error =
+                                            toggle_lock(req, device_lock, lock_pass_token, true);
+                                    }
 
-                            if req.contains(unlock_pass_token) {
-                                has_error = toggle_lock(req, device_lock, unlock_pass_token, false);
+                                    if get_request.contains(unlock_pass_token) {
+                                        has_error =
+                                            toggle_lock(req, device_lock, unlock_pass_token, false);
+                                    }
+
+                                    req_processed = true;
+                                }
                             }
 
                             if req.contains("\r\n\r\n") {
+                                //print!("{}", req);
                                 println!();
                                 break;
                             }
@@ -119,7 +131,6 @@ pub async fn serve(
                 };
 
                 if has_error {
-                    println!("Has error!");
                     let repl = page.replace("no-error", "error");
                     session
                         .write(&[head, repl.as_bytes()].concat())
@@ -148,7 +159,7 @@ pub async fn serve(
         drop(session);
         println!("{MOD}: Closing socket");
         socket.close();
-        //Timer::after(Duration::from_millis(1000)).await;
+        Timer::after(Duration::from_millis(1000)).await;
 
         socket.abort();
     }
@@ -160,8 +171,6 @@ fn toggle_lock(req: &str, device_lock: &AtomicBool, pass_token: &str, we_will_lo
         .find(|token| token.contains(pass_token))
         .unwrap()
         .replace(pass_token, "");
-
-    println!("SERVER: pass: {}, we gonna lock: {}", pass, we_will_lock);
 
     if pass == PASSWORD_DEVICE {
         device_lock.store(we_will_lock, Ordering::Release);
