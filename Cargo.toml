@@ -42,7 +42,8 @@ critical-section = "1.2.0"
 static_cell = { version = "2.1.1", features = ["nightly"] }
 embassy-sync = "0.7.2"
 
-esp-mbedtls = { path = "./esp-mbedtls", features = ["esp32c3"] }
+esp-mbedtls = { git = "https://github.com/esp-rs/esp-mbedtls.git", features = ["esp32c3"], rev = "35e8ccd5" }
+
 smoltcp = { version = "0.12.0", default-features = false, features = [
     "proto-ipv4",
 ]}
