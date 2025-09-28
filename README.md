@@ -20,7 +20,7 @@ It should work much better on a c6 or newer device with 512kb+ RAM.
 ## Encryption engine
 
 Mbed-TLS C library is used for https. esp-mbedtls wrapper included uses FFI bindings to the library.
-As esp-mbedtls is experimental and currently not published to crates.io, we have to use a cloned version.
+As esp-mbedtls is experimental and currently not published to crates.io, we have to use a cloned git version.
 Something native like [embedded-tls](https://crates.io/crates/embedded-tls) can be used in the future if it saves some memory resources and works as fast.
 
 ## Setup
@@ -48,11 +48,6 @@ cargo run -r
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
-
-## License of esp-mbedtls
-
-`esp-mbedtls` and `esp-mbedtls-sys` both are licensed under MIT or APACHE2.0.
-See LICENSE files in these directories for details.
 
 ## Contributing
 
