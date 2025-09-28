@@ -1,7 +1,7 @@
 use core::net::Ipv4Addr;
 
 use embassy_executor::Spawner;
-use embassy_net::Stack;
+use embassy_net::{Stack, StackResources};
 use embassy_time::{Duration, Timer};
 
 use esp_println::println;
@@ -15,7 +15,7 @@ use esp_wifi::wifi::WifiState;
 
 use static_cell::make_static;
 
-use crate::WEB_TASK_POOL_SIZE;
+use crate::TOTAL_SOCKETS;
 
 const SSID: &str = env!["SSID"];
 const PASSWORD_WIFI: &str = env!["PASSWORD_WIFI"];
@@ -40,7 +40,7 @@ pub fn init(
             gateway: None,
             dns_servers: Default::default(),
         }),
-        make_static!(embassy_net::StackResources::<WEB_TASK_POOL_SIZE>::new()),
+        make_static!(StackResources::<TOTAL_SOCKETS>::new()),
         random_seed,
     );
 
@@ -68,9 +68,7 @@ async fn connection(mut controller: WifiController<'static>) {
             let client_config = WifiConfig::Client(WifiClientConfig {
                 ssid: SSID.into(),
                 password: PASSWORD_WIFI.into(),
-                bssid: None,
-                auth_method: Default::default(),
-                channel: None,
+                ..Default::default()
             });
             controller.set_configuration(&client_config).unwrap();
             println!("{MOD}: Starting");
