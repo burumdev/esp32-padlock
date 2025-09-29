@@ -9,6 +9,8 @@ repository = "https://github.com/burumdev/esp32-padlock"
 description = "ESP32cX application for securely locking-unlocking RISC-V devices over encrypted endpoint."
 keywords = ["esp32", "security", "auth", "no_std", "embedded"]
 categories = ["embedded", "no-std::no-alloc", "security", "authentication", "web-programming::http-server"]
+# Exclude screenshots from publishing
+exclude = ["/screenshots/"]
 
 [[bin]]
 name = "esp32-padlock"
@@ -61,6 +63,3 @@ incremental      = false
 lto              = 'fat'
 opt-level        = 's'
 overflow-checks  = false
-
-# Exclude screenshots from publishing
-exclude = ["/screenshots/"]
