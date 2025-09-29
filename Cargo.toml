@@ -61,3 +61,6 @@ incremental      = false
 lto              = 'fat'
 opt-level        = 's'
 overflow-checks  = false
+
+# Exclude screenshots from publishing
+exclude = ["/screenshots/"]

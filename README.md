@@ -12,6 +12,11 @@ Once unlocked, an `AtomicBool` flag named `DEVICE_LOCK` gets set to `false`.
 Default value for this flag is `true`, which means device boots as locked, but this can be changed in `main.rs` file.
 This flag can be used to enable or disable whatever further functionality on the device.
 
+## Screenshots
+
+![esp32-padlock in locked state](https://github.com/burumdev/esp32-padlock/blob/main/screenshots/padlock_locked.jpg)
+![esp32-padlock in unlocked state](https://github.com/burumdev/esp32-padlock/blob/main/screenshots/padlock_unlocked.jpg)
+
 ## Memory hog
 
 The app is a memory hog for c3 devices and barely survives the ordeal of serving https pages, locking unlocking etc.
