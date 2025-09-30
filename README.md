@@ -22,6 +22,11 @@ This flag can be used to enable or disable whatever further functionality on the
 The app is a memory hog for c3 devices and barely survives the ordeal of serving https pages, locking unlocking etc.
 It should work much better on a c6 or newer device with 512kb+ RAM.
 
+## Susceptible to Denial of Service attacks
+
+By default app uses one task to handle incoming requests because of memory issues.
+This makes it very easy to maliciously hold this connection captive and deny others from reaching the endpoint. At least two asynchronous connections would be minimaly required to mitigate the most basic form of DoS attacks. One half-solution to this problem is to keep the static IP of the device a secret which should make it a tid-bit harder for malicious actors to find the endpoint. Another solution is to use a device with more RAM and run two tasks simultaneously along with hiding the static IP. Task size can be changed by increasing the value of `SERVER_SOCKETS` value in `main.rs`.
+
 ## Encryption engine
 
 Mbed-TLS C library is used for https. esp-mbedtls wrapper included uses FFI bindings to the library.
