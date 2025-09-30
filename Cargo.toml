@@ -27,7 +27,9 @@ esp-wifi = { version = "0.15.0", features = [
 ]}
 esp-alloc = "0.8.0"
 esp-println = { version = "0.15.0", features = ["esp32c3"] }
-esp-backtrace = { version = "0.17.0", features = ["panic-handler", "println"] }
+# use panic_halt for production as backtrace adds overhead
+#esp-backtrace = { version = "0.17.0", features = ["panic-handler", "println"] }
+panic-halt = "1.0.0"
 
 embassy-net = { version = "0.7.0", features = [
   "proto-ipv4",
