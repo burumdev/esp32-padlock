@@ -14,13 +14,16 @@ use core::sync::atomic::AtomicBool;
 use static_cell::make_static;
 
 use embassy_executor::Spawner;
-use esp_backtrace as _;
+
+//use esp_backtrace as _;
 use esp_hal::clock::CpuClock;
 use esp_hal::rng::Rng;
 use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::timer::timg::TimerGroup;
 
 use esp_mbedtls::Tls;
+
+use panic_halt as _;
 
 mod network;
 mod server;
