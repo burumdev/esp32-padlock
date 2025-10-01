@@ -1,4 +1,4 @@
-# ESP32 Padlock
+# 🔒 ESP32 Padlock 🔒
 
 Securely lock and unlock your esp32-cX device over an encrypted web endpoint.
 
