@@ -65,3 +65,6 @@ incremental      = false
 lto              = 'fat'
 opt-level        = 's'
 overflow-checks  = false
+
+[build-dependencies]
+minify-html = "0.16.4"

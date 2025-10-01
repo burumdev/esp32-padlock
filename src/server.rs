@@ -15,8 +15,8 @@ use crate::{DEVICE_LOCK, SERVER_SOCKETS};
 
 use edge_nal::TcpBind;
 
-const RX_SIZE: usize = 4096;
-const TX_SIZE: usize = 2048;
+const RX_SIZE: usize = 1024;
+const TX_SIZE: usize = 1024;
 
 const PASSWORD_DEVICE: &str = env!["PASSWORD_DEVICE"];
 const MOD: &str = "SERVER";
@@ -54,18 +54,27 @@ impl Handler for HttpHandler {
             body.read(&mut buf).await?;
             let body_str = core::str::from_utf8(&buf).unwrap_or("");
 
-            has_error = toggle_lock(body_str.trim());
+            let pword = body_str.trim().replace("p=", "");
+
+            has_error = if pword == PASSWORD_DEVICE {
+                let is_locked = DEVICE_LOCK.load(Ordering::Acquire);
+                DEVICE_LOCK.store(!is_locked, Ordering::Release);
+
+                false
+            } else {
+                true
+            };
         }
 
         connection
             .initiate_response(200, Some("OK"), &[("Content-Type", "text/html")])
             .await?;
 
-        let is_locked = DEVICE_LOCK.load(Ordering::SeqCst);
+        let is_locked = DEVICE_LOCK.load(Ordering::Acquire);
         let html = if is_locked {
-            include_str!("locked.html")
+            include_str!("locked.min.html")
         } else {
-            include_str!("unlocked.html")
+            include_str!("unlocked.min.html")
         };
 
         if has_error {
@@ -119,17 +128,4 @@ pub async fn serve(stack: embassy_net::Stack<'static>, tls: &'static Tls<'static
             .await
             .unwrap()
     }
-}
-
-fn toggle_lock(body_str: &str) -> bool {
-    let pword = body_str.replace("p=", "");
-
-    if pword == PASSWORD_DEVICE {
-        let is_locked = DEVICE_LOCK.load(Ordering::Acquire);
-        DEVICE_LOCK.store(!is_locked, Ordering::Release);
-
-        return false;
-    }
-
-    true
 }
