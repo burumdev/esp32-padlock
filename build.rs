@@ -1,7 +1,57 @@
+use std::{
+    fs::File,
+    io::{Read, Write},
+};
+
 fn main() {
     linker_be_nice();
     // make sure linkall.x is the last linker script (otherwise might cause problems with flip-link)
     println!("cargo:rustc-link-arg=-Tlinkall.x");
+
+    let mut minify_config = minify_html::Cfg::default();
+    minify_config.enable_possibly_noncompliant();
+    minify_config.minify_css = true;
+
+    let locked_html = "./src/locked.html";
+    let unlocked_html = "./src/unlocked.html";
+
+    minify_html_file(locked_html, "./src/locked.min.html", &minify_config);
+    minify_html_file(unlocked_html, "./src/unlocked.min.html", &minify_config);
+}
+
+fn minify_html_file(file_path: &str, save_as: &str, minify_config: &minify_html::Cfg) {
+    let mut file = File::open(file_path).expect(
+        format!(
+            "Minify ERROR: Could not open file {} for minification.",
+            file_path
+        )
+        .as_str(),
+    );
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).expect(
+        format!(
+            "Minify ERROR: Could not read file {} for minification.",
+            file_path
+        )
+        .as_str(),
+    );
+
+    let minified = minify_html::minify(contents.as_bytes(), minify_config);
+
+    let mut save_file = File::create(save_as).expect(
+        format!(
+            "Minify ERROR: Could not create file {} to save minified html.",
+            save_as
+        )
+        .as_str(),
+    );
+    save_file.write_all(&minified).expect(
+        format!(
+            "Minify ERROR: Could not write to minified html file {}",
+            save_as
+        )
+        .as_str(),
+    );
 }
 
 fn linker_be_nice() {

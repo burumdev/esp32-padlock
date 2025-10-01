@@ -21,3 +21,7 @@ target/
 # Env secrets
 .cargo/config.toml
 certs/*
+
+# Minified html
+src/locked.min.html
+src/unlocked.min.html
