@@ -115,7 +115,7 @@ pub async fn serve(stack: embassy_net::Stack<'static>, tls: &'static Tls<'static
         ..Default::default()
     };
 
-    let timeout = 15_000;
+    let timeout = 7_000;
     loop {
         let tls_acceptor = TlsAcceptor::new(&acceptor, TlsVersion::Tls1_2, certs, tls.reference());
 

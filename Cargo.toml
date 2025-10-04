@@ -2,7 +2,7 @@
 edition      = "2021"
 name         = "esp32-padlock"
 rust-version = "1.86"
-version      = "0.1.0"
+version      = "0.2.0"
 license = "MIT"
 authors = ["Barış Ürüm"]
 repository = "https://github.com/burumdev/esp32-padlock"
@@ -16,17 +16,16 @@ exclude = ["/screenshots/"]
 name = "esp32-padlock"
 
 [dependencies]
-esp-bootloader-esp-idf = { version = "0.2.0", features = ["esp32c3"] }
-esp-hal                = { version = "=1.0.0-rc.0", features = ["esp32c3", "unstable"] }
-esp-hal-embassy = { version = "0.9.0", features = ["esp32c3"] }
+esp-bootloader-esp-idf = { version = "0.2.0" }
+esp-hal                = { version = "=1.0.0-rc.0", features = ["unstable"] }
+esp-hal-embassy = { version = "0.9.0" }
 esp-wifi = { version = "0.15.0", features = [
   "builtin-scheduler",
   "esp-alloc",
-  "esp32c3",
   "wifi",
 ]}
 esp-alloc = "0.8.0"
-esp-println = { version = "0.15.0", features = ["esp32c3"] }
+esp-println = { version = "0.15.0" }
 # use panic_halt for production as backtrace adds overhead
 #esp-backtrace = { version = "0.17.0", features = ["panic-handler", "println"] }
 panic-halt = "1.0.0"
@@ -43,7 +42,7 @@ embedded-io-async = "0.6.1"
 
 static_cell = { version = "2.1.1", features = ["nightly"] }
 
-esp-mbedtls = { git = "https://github.com/esp-rs/esp-mbedtls.git", features = ["esp32c3"], rev = "35e8ccd5" }
+esp-mbedtls = { git = "https://github.com/esp-rs/esp-mbedtls.git", rev = "35e8ccd5" }
 
 smoltcp = { version = "0.12.0", default-features = false, features = [
     "proto-ipv4",
@@ -51,6 +50,32 @@ smoltcp = { version = "0.12.0", default-features = false, features = [
 edge-http = "0.6.1"
 edge-nal = "0.5.0"
 edge-nal-embassy = "0.6.0"
+
+# These are required to use static_cell and atomics with c6 devices
+critical-section = { version = "1.2.0", optional = true }
+portable-atomic = { version = "1.11.1", features = ["critical-section"], optional = true }
+
+[features]
+esp32c3 = [
+  "esp-mbedtls/esp32c3",
+  "esp-println/esp32c3",
+  "esp-wifi/esp32c3",
+  "esp-hal-embassy/esp32c3",
+  "esp-hal/esp32c3",
+  "esp-bootloader-esp-idf/esp32c3",
+]
+esp32c6 = [
+  "esp-mbedtls/esp32c6",
+  "esp-println/esp32c6",
+  "esp-wifi/esp32c6",
+  "esp-hal-embassy/esp32c6",
+  "esp-hal/esp32c6",
+  "esp-bootloader-esp-idf/esp32c6",
+  "portable-atomic?/critical-section"
+]
+
+[build-dependencies]
+minify-html = "0.16.4"
 
 [profile.dev]
 debug = true
@@ -65,6 +90,3 @@ incremental      = false
 lto              = 'fat'
 opt-level        = 's'
 overflow-checks  = false
-
-[build-dependencies]
-minify-html = "0.16.4"
