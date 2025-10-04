@@ -32,9 +32,9 @@ mod server;
 // For more information see: <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/system/app_image_format.html#application-description>
 esp_bootloader_esp_idf::esp_app_desc!();
 
-// Numbers higher than this causes memory errors on a c3
-// Otherwise adjust with arena size feature flags for
-// embassy executor in Config.toml or try allocating more memory with esp_alloc
+// Numbers higher than this cause memory errors on a c3
+// With a c6 increasing this number and allocating more memory with esp_alloc
+// can make 2 simultaneous tasks work
 pub const SERVER_SOCKETS: usize = 1;
 pub const TOTAL_SOCKETS: usize = SERVER_SOCKETS + 1;
 
